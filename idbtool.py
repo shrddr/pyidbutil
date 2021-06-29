@@ -286,12 +286,14 @@ def dumpenum(id0, node):
 
 
 def dumpimport(id0, node):
-    startkey = id0.makekey(node, 'A')
-    endkey = id0.makekey(node, 'B')
+    startkey = id0.makekey(node+1, 'S')
+    endkey = id0.makekey(node+1, 'S', 0xFFFFFFFFFFFFFFFF)
     cur = id0.btree.find('ge', startkey)
     while cur.getkey() < endkey:
-        ea = id0.int(cur)
-        print("%08x: %s" % (ea, id0.name(ea)))
+        txt = id0.string(cur)
+        key = cur.getkey()
+        ea = id0.decodekey(key)[3]
+        print("%08x: %s" % (ea, txt))
         cur.next()
 
 
